@@ -9,14 +9,10 @@ extension Optional: _Chain_OptionalProtocol {
   }
 }
 
-postfix operator ^
+postfix operator &
 
-postfix func ^ <T>(argument: T) -> Chain<T> {
+postfix func & <T>(argument: T) -> Chain<T> {
   .init(argument)
-}
-
-postfix func ^ <T>(argument: Chain<T>) -> T {
-  argument.value
 }
 
 public struct Chain<Value> {
