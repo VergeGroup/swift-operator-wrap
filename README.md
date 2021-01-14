@@ -1,4 +1,4 @@
-# Chain<Value>
+# & - chain
 
 An experimental project of creating method chain API using something like Monad.
 
