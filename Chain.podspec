@@ -1,5 +1,5 @@
 Pod::Spec.new do |spec|
-  spec.name = "Chain"
+  spec.name = "ChainLib"
   spec.version = "1.0.0"
   spec.summary = "A tiny library that enables us to describe operations in method-chain."
   spec.description = <<-DESC
