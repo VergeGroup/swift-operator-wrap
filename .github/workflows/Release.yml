@@ -16,4 +16,4 @@ jobs:
       - name: Deploy
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        run: pod trunk push Chain.podspec --allow-warnings
+        run: pod trunk push ChainLib.podspec --allow-warnings
