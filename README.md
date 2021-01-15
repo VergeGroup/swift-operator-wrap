@@ -1,6 +1,6 @@
 # & - chain
 
-An experimental project of creating method chain API using something like Monad.
+A tiny library that enables us to describe operations in method-chain.
 
 ## Usage
 
@@ -14,3 +14,7 @@ let view: UIView = UIView()&.do {
   $0.backgroundColor = .white
 }.value
 ```
+
+## Motivation
+
+**a global function** or **operator** are only way to add a new feature without customizing our own types.
