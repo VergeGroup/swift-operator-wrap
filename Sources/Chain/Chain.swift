@@ -1,79 +1,43 @@
 
-public protocol _Chain_OptionalProtocol {
-  associatedtype Wrapped
-  var _chain_wrapped: Wrapped? { get }
-}
+postfix operator &>
 
-extension Optional: _Chain_OptionalProtocol {
-  public var _chain_wrapped: Wrapped? {
-    self
-  }
-}
-
-postfix operator &
-
-public postfix func & <T>(argument: T) -> Chain<T> {
+public postfix func &> <T>(argument: T) -> Wrap<T> {
   .init(argument)
 }
 
-/**
- Starts method-chain statement
- */
-public func chain<T>(_ value: @autoclosure () -> T) -> Chain<T> {
-  .init(value())
-}
-
-/**
- Starts method-chain statement
- */
-public func chain<T>(_ value: () -> T) -> Chain<T> {
-  .init(value())
-}
-
-public struct Chain<Value> {
+public struct Wrap<Value> {
 
   public let value: Value
 
   public init(_ value: Value) {
     self.value = value
   }
-
+  
 }
 
-extension Chain {
+extension Wrap {
 
-  public func map<U>(_ transform: (Value) throws -> U) rethrows -> Chain<U> {
-    .init(try transform(value))
-  }
-
-  public func flatMap<U>(_ transform: (Value) throws -> Chain<U>) rethrows -> Chain<U> {
-    .init(try transform(value).value)
+  public func map<U>(_ transform: (Value) throws -> U) rethrows -> U {
+    try transform(value)
   }
 
   @discardableResult
-  public func `do`(_ applier: (Value) throws -> Void) rethrows -> Chain<Value> {
+  public func `do`(_ applier: (Value) throws -> Void) rethrows -> Value where Value : AnyObject {
     try applier(value)
-    return self
+    return value
   }
-
-  public func modify(_ modifier: (inout Value) throws -> Void) rethrows -> Chain<Value> {
+  
+  public func modify(_ modifier: (inout Value) throws -> Void) rethrows -> Value {
     var v = value
     try modifier(&v)
-    return .init(v)
+    return v
   }
 
-  public func filter(_ filter: (Value) -> Bool) -> Chain<Value?> {
+  public func filter(_ filter: (Value) -> Bool) -> Value? {
     guard filter(value) else {
-      return .init(nil)
+      return nil
     }
-    return .init(value)
+    return value
   }
-
-  public func ifEmpty(_ fallbackValue: Value.Wrapped) -> Chain<Value.Wrapped> where Value : _Chain_OptionalProtocol {
-    if let wrapped = self.value._chain_wrapped {
-      return .init(wrapped)
-    }
-    return .init(fallbackValue)
-  }
-
+  
 }
