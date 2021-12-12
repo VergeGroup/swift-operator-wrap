@@ -15,6 +15,10 @@ public struct Wrap<Value> {
   
 }
 
+public func modify<Value>(_ value: inout Value, _ modifier: (inout Value) -> Void) {
+  modifier(&value)
+}
+
 extension Wrap {
 
   public func map<U>(_ transform: (Value) throws -> U) rethrows -> U {
