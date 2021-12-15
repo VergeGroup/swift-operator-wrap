@@ -1,13 +1,13 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.5
 import PackageDescription
 
 let package = Package(
-  name: "Chain",  
+  name: "Wrap",
   products: [
-    .library(name: "Chain", targets: ["Chain"]),
+    .library(name: "Wrap", targets: ["Wrap"]),
   ],
   targets: [
-    .target(name: "Chain", dependencies: []),
+    .target(name: "Wrap", dependencies: []),
   ],
   swiftLanguageVersions: [.v5]
 )
