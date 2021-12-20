@@ -1,7 +1,7 @@
 
-postfix operator +>
+postfix operator &>
 
-public postfix func +> <T>(argument: T) -> Wrap<T> {
+public postfix func &> <T>(argument: T) -> Wrap<T> {
   .init(argument)
 }
 
