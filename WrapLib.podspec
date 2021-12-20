@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = "WrapLib"
-  spec.version = "2.0.0"
+  spec.version = "3.0.0"
   spec.summary = "A tiny library that enables us to describe operations in method-chain."
   spec.description = <<-DESC
   A tiny library that enables us to describe operations in method-chain.
