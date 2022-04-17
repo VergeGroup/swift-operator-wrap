@@ -14,6 +14,14 @@ final class Tests: XCTestCase {
       
     }
     
+    var text = ""
+    
+    text <& .modify {
+      $0 = "muuk"
+    }
+    
+    XCTAssertEqual(text, "muuk")
+    
   }
   
 }
