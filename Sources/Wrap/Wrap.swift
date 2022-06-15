@@ -1,47 +1,47 @@
-
-postfix operator &>
-
-public postfix func &> <T>(argument: T) -> Wrap<T> {
-  .init(argument)
+precedencegroup WrapPrecedence {
+  associativity: left
 }
 
-public struct Wrap<Value> {
+infix operator &>: WrapPrecedence
+infix operator <&: WrapPrecedence
 
-  public let value: Value
+public func <& <T, O>(lhs: inout T, modifier: WrapModifier<T, O>) -> O {
+  modifier.modify(&lhs)
+}
 
-  public init(_ value: Value) {
-    self.value = value
+@discardableResult
+public func &> <T, O>(lhs: T, applier: WrapApplier<T, O>) -> O {
+  applier.apply(lhs)
+}
+
+public struct WrapModifier<Input, Output> {
+  
+  public let modify: (inout Input) -> Output
+  
+  public init(_ modify: @escaping (inout Input) -> Output) {
+    self.modify = modify
   }
   
-}
-
-public func modify<Value>(_ value: inout Value, _ modifier: (inout Value) -> Void) {
-  modifier(&value)
-}
-
-extension Wrap {
-
-  public func map<U>(_ transform: (Value) throws -> U) rethrows -> U {
-    try transform(value)
-  }
-
-  @discardableResult
-  public func `do`(_ applier: (Value) throws -> Void) rethrows -> Value where Value : AnyObject {
-    try applier(value)
-    return value
-  }
-  
-  public func modify(_ modifier: (inout Value) throws -> Void) rethrows -> Value {
-    var v = value
-    try modifier(&v)
-    return v
-  }
-
-  public func filter(_ filter: (Value) -> Bool) -> Value? {
-    guard filter(value) else {
-      return nil
+  public static func modify(_ modify: @escaping (inout Input) -> Void) -> WrapModifier<Input, Void> {
+    return .init {
+      modify(&$0)
     }
-    return value
   }
   
+}
+
+public struct WrapApplier<Input, Output> {
+  
+  public let apply: (Input) -> Output
+  
+  public init(_ apply: @escaping (Input) -> Output) {
+    self.apply = apply
+  }
+    
+  public static func `do`(_ applier: @escaping (Input) -> Void) -> WrapApplier<Input, Input> {
+    return .init {
+      applier($0)
+      return $0
+    }
+  }
 }
