@@ -1,6 +1,9 @@
+precedencegroup WrapPrecedence {
+  associativity: left
+}
 
-infix operator &>
-infix operator <&
+infix operator &>: WrapPrecedence
+infix operator <&: WrapPrecedence
 
 public func <& <T, O>(lhs: inout T, modifier: WrapModifier<T, O>) -> O {
   modifier.modify(&lhs)

@@ -5,13 +5,9 @@ import Wrap
 final class Tests: XCTestCase {
   
   func testApplier() {
-    
-    "" &> .do { _ in
-      
-    }
-    
-    "" &> .do { _ in
-      
+     
+    "1" &> .do {
+      XCTAssertEqual($0, "1")
     }
     
     var text = ""
