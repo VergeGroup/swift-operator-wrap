@@ -1,47 +1,55 @@
 
 postfix operator &>
 
-public postfix func &> <T>(argument: T) -> Wrap<T> {
-  .init(argument)
+public postfix func &> <T>(argument: consuming T) -> Wrap<T> {
+  .init(consume argument)
 }
 
-public struct Wrap<Value> {
+public struct Wrap<Value>: ~Copyable {
 
   public let value: Value
 
-  public init(_ value: Value) {
-    self.value = value
+  public init(_ value: consuming Value) {
+    self.value = consume value
   }
-  
+
 }
 
-public func modify<Value>(_ value: inout Value, _ modifier: (inout Value) -> Void) {
-  modifier(&value)
+public func modify<Value>(_ value: inout Value, _ modifier: (inout Value) throws -> Void) rethrows {
+  try modifier(&value)
 }
 
 extension Wrap {
 
-  public func map<U>(_ transform: (Value) throws -> U) rethrows -> U {
+  public borrowing func map<U>(_ transform: (consuming Value) throws -> U) rethrows -> U {
     try transform(value)
   }
 
   @discardableResult
-  public func `do`(_ applier: (Value) throws -> Void) rethrows -> Value where Value : AnyObject {
+  public borrowing func `do`(_ applier: (borrowing Value) throws -> Void) rethrows -> Value {
     try applier(value)
     return value
   }
-  
-  public func modify(_ modifier: (inout Value) throws -> Void) rethrows -> Value {
+
+  @discardableResult
+  @_disfavoredOverload
+  public borrowing func `do`(_ applier: (borrowing Value) throws -> Void) rethrows -> Value? {
+    try applier(value)
+    return value
+  }
+
+  public borrowing func modify(_ modifier: (inout Value) throws -> Void) rethrows -> Value {
     var v = value
     try modifier(&v)
     return v
   }
 
-  public func filter(_ filter: (Value) -> Bool) -> Value? {
+  public borrowing func filter(_ filter: (borrowing Value) -> Bool) -> Value? {
     guard filter(value) else {
       return nil
     }
     return value
   }
-  
+
 }
+
