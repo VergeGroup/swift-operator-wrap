@@ -1,4 +1,4 @@
-# &>
+# value`&>`.do { ... }
 
 A tiny library that enables us to describe operations in method-chain.
 
@@ -17,10 +17,10 @@ let view: UIView = UIView()&>.do {
 
 ## Motivation
 
-Actually, I'm not addict to that getting a custom operator.  
-However **a global function** or **operator** are only way to add a new feature without customizing our own types.
+Actually, I'm not addicted to getting a custom operator.  
+However **a global function** or **operator** are the only way to add a new feature without customizing our own types.
 
-Other way is using something protocol and extending it like this.  
+Another way is using something protocol and extending it like this.  
 It can not be used in struct without adding that protocol.
 
 In fact, this structure looks very natural, because the all of method chaining in Swift standard libary come from an kind of monad.  
