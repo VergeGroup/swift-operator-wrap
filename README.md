@@ -15,6 +15,12 @@ let view: UIView = UIView()&>.do {
 }
 ```
 
+```swift
+let someProperty = await fetch()&>.map { data in
+  data.someProperty
+}
+```
+
 ## Motivation
 
 Actually, I'm not addicted to getting a custom operator.  
