@@ -1,11 +1,16 @@
 
 postfix operator &>
+infix operator <&
 
-public postfix func &> <T>(argument: consuming T) -> Wrap<T> {
+public postfix func &> <T>(argument: consuming T) -> _FlowDownBox<T> {
   .init(consume argument)
 }
 
-public struct Wrap<Value>: ~Copyable {
+public func <& <T>(argument: inout T, modifier: (inout T) throws -> Void) rethrows {
+  try modifier(&argument)
+}
+
+public struct _FlowDownBox<Value>: ~Copyable {
 
   public let value: Value
 
@@ -19,32 +24,32 @@ public func modify<Value>(_ value: inout Value, _ modifier: (inout Value) throws
   try modifier(&value)
 }
 
-extension Wrap {
+extension _FlowDownBox {
 
-  public borrowing func map<U>(_ transform: (consuming Value) throws -> U) rethrows -> U {
+  public consuming func map<U>(_ transform: (consuming Value) throws -> U) rethrows -> U {
     try transform(value)
   }
 
   @discardableResult
-  public borrowing func `do`(_ applier: (borrowing Value) throws -> Void) rethrows -> Value {
+  public consuming func `do`(_ applier: (consuming Value) throws -> Void) rethrows -> Value {
     try applier(value)
     return value
   }
 
   @discardableResult
   @_disfavoredOverload
-  public borrowing func `do`(_ applier: (borrowing Value) throws -> Void) rethrows -> Value? {
+  public consuming func `do`(_ applier: (consuming Value) throws -> Void) rethrows -> Value? {
     try applier(value)
     return value
   }
 
-  public borrowing func modify(_ modifier: (inout Value) throws -> Void) rethrows -> Value {
+  public consuming func modify(_ modifier: (inout Value) throws -> Void) rethrows -> Value {
     var v = value
     try modifier(&v)
     return v
   }
 
-  public borrowing func filter(_ filter: (borrowing Value) -> Bool) -> Value? {
+  public consuming func filter(_ filter: (consuming Value) -> Bool) -> Value? {
     guard filter(value) else {
       return nil
     }
