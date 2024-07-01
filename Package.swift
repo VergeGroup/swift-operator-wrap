@@ -8,6 +8,7 @@ let package = Package(
   ],
   targets: [
     .target(name: "Wrap", dependencies: []),
+    .testTarget(name: "WrapTests", dependencies: ["Wrap"])
   ],
   swiftLanguageVersions: [.v5]
 )
