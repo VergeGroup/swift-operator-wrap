@@ -12,7 +12,7 @@ public func <& <T>(argument: inout T, modifier: (inout T) throws -> Void) rethro
 
 public struct _FlowDownBox<Value>: ~Copyable {
 
-  public let value: Value
+  public var value: Value
 
   public init(_ value: consuming Value) {
     self.value = consume value
@@ -44,9 +44,8 @@ extension _FlowDownBox {
   }
 
   public consuming func modify(_ modifier: (inout Value) throws -> Void) rethrows -> Value {
-    var v = value
-    try modifier(&v)
-    return v
+    try modifier(&value)
+    return value
   }
 
   public consuming func filter(_ filter: (consuming Value) -> Bool) -> Value? {
