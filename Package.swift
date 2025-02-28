@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:6.0
 import PackageDescription
 
 let package = Package(
@@ -10,5 +10,5 @@ let package = Package(
     .target(name: "Wrap", dependencies: []),
     .testTarget(name: "WrapTests", dependencies: ["Wrap"])
   ],
-  swiftLanguageVersions: [.v5]
+  swiftLanguageModes: [.v6]
 )
