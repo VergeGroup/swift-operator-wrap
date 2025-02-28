@@ -20,35 +20,35 @@ public struct _FlowDownBox<Value>: ~Copyable {
 
 }
 
-public func modify<Value>(_ value: inout Value, _ modifier: (inout Value) throws -> Void) rethrows {
+public func modify<Value>(_ value: inout Value, _ modifier: (inout Value) throws -> Void, isolation: isolated (any Actor)? = #isolation) rethrows {
   try modifier(&value)
 }
 
 extension _FlowDownBox {
 
-  public consuming func map<U>(_ transform: (consuming Value) throws -> U) rethrows -> U {
+  public consuming func map<U>(_ transform: (consuming Value) throws -> U, isolation: isolated (any Actor)? = #isolation) rethrows -> U {
     try transform(value)
   }
 
   @discardableResult
-  public consuming func `do`(_ applier: (consuming Value) throws -> Void) rethrows -> Value {
+  public consuming func `do`(_ applier: (consuming Value) throws -> Void, isolation: isolated (any Actor)? = #isolation) rethrows -> Value {
     try applier(value)
     return value
   }
 
   @discardableResult
   @_disfavoredOverload
-  public consuming func `do`(_ applier: (consuming Value) throws -> Void) rethrows -> Value? {
+  public consuming func `do`(_ applier: (consuming Value) throws -> Void, isolation: isolated (any Actor)? = #isolation) rethrows -> Value? {
     try applier(value)
     return value
   }
 
-  public consuming func modify(_ modifier: (inout Value) throws -> Void) rethrows -> Value {
+  public consuming func modify(_ modifier: (inout Value) throws -> Void, isolation: isolated (any Actor)? = #isolation) rethrows -> Value {
     try modifier(&value)
     return value
   }
 
-  public consuming func filter(_ filter: (consuming Value) -> Bool) -> Value? {
+  public consuming func filter(_ filter: (consuming Value) -> Bool, isolation: isolated (any Actor)? = #isolation) -> Value? {
     guard filter(value) else {
       return nil
     }
